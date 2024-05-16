@@ -96,6 +96,10 @@ variable "etiquetas_comunes" {
   })
 }
 
+variable "prefijo_reglas" {
+  type = string  
+}
+
 variable "reglas_servidores_linux_web" {
 
   # type = list(object({
@@ -111,5 +115,25 @@ variable "reglas_servidores_linux_web" {
     })
   )  
 
+}
+
+variable "nombres_direcciones_ip_publicas" {
+  type = set(string)
+}
+
+
+variable "configuracion_redes" {
+  type = list(object({
+    nombre = string
+    direccion = list(string)
+  }))
+}
+
+variable "mapa_configuracion_redes" {
+  type = map(object({
+    name = string,
+    direcciones = list(string)
+  }))
+  
 }
 
