@@ -38,24 +38,26 @@ locals {
   mapa_configuracion_redes = {
     "red_1" = {
       name = "red_1",
-      direcciones = ["10.0.0.0/16"]    
+      direcciones = [ "10.0.0.0/16" ] 
+      # direcciones = ["10.0.0.0/16", "30.0.0.0/16"]    
     },
     "red_2" = {
       name = "red_2",
-      direcciones = ["20.0.0.0/16"]    
+      # direcciones = ["20.0.0.0/16", "40.0.0.0/16"]    
+      direcciones = [ "20.0.0.0/16" ]
     }
   }
 
-  mapa_de_subredes = {
-    "subnet_1" = {
-      name = "subnet_1",
-      direcciones = ["10.1.0.0/8"]    
-    },
-    "subnet_2" = {
-      name = "subnet_2",
-      direcciones = ["10.1.0.0/8"]    
-    }
-  }  
+  # mapa_de_subredes = {
+  #   "subnet_1" = {
+  #     name = "subnet_1",
+  #     direcciones = ["10.1.0.0/8"]    
+  #   },
+  #   "subnet_2" = {
+  #     name = "subnet_2",
+  #     direcciones = ["10.1.0.0/8"]    
+  #   }
+  # }  
 
 }
 
@@ -68,9 +70,10 @@ module "redes" {
   # Propiedades en entrada
   nombre_grupo_recursos = azurerm_resource_group.cursotf_alfredo_rg.name
   nombre_region = azurerm_resource_group.cursotf_alfredo_rg.location
-  mapa_de_subredes = local.mapa_de_subredes
+  # mapa_de_subredes = local.mapa_de_subredes
 
   nombre_red = each.key
   direcciones_red = each.value.direcciones
  
 }
+

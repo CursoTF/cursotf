@@ -12,8 +12,15 @@ output "cadena_grupo_recursos" {
 }
 
 
-# output "datos_de_red" {
+output "datos_de_red" {
 
-#     value = module.redes[].objeto_red
+    value = values(module.redes)[*].objeto_red
   
-# }
+}
+
+
+output "datos_de_subredes" {
+
+    value = values(module.redes)[*].subredes_de_la_red
+  
+}

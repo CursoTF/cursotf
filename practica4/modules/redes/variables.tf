@@ -16,10 +16,10 @@ variable "nombre_grupo_recursos" {
     default = "cursotf_grupo_pruebas"
 }
 
-variable "mapa_de_subredes" {
-    type=map(object({
-      name = string,
-      direcciones = list(string)
-    }))
+# variable "mapa_de_subredes" {
+#     type=map(object({
+#       name = string,
+#       direcciones = list(string)
+#     }))
   
-}
+# }
