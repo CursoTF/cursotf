@@ -8,6 +8,15 @@ terraform {
       version = "~>3.103.0"
     }
 
+    local = {
+      source = "hashicorp/local"
+      version = "2.5.1"
+    }
+
+    random = {
+      source = "hashicorp/random"
+      version = "3.6.1"
+    }
   }
 
   # Versión mínima de Terraform
@@ -68,7 +77,7 @@ resource "azurerm_key_vault_access_policy" "cursotf_alfredo_politica_kv" {
 
   secret_permissions = [ 
 
-    "Get", "Delete", "Set", "List"
+    "Get", "Delete", "Set", "List", "Recover", "Purge", "Restore", "Backup"
 
   ]
 
@@ -138,26 +147,180 @@ resource "azurerm_key_vault_secret" "clave_usuario" {
   
 }
 
-data "azurerm_key_vault_secret" "nombre_usuario" {
-  
+resource "azurerm_key_vault_key" "clave_rsa" {
+
+  name = "clave-rsa"
+
   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
-  name = "nombre-usuario"
+
+  # RSA ó EC
+  key_type = "RSA"
+  key_size = 2048
+
+  key_opts = [ "decrypt", "encrypt", "sign", "verify", "wrapKey", "unwrapKey" ]
+  
 }
 
-data "azurerm_key_vault_secret" "clave_usuario" {
-  
+resource "azurerm_key_vault_certificate" "certificado_1" {
+
+  name = "certificado-1"
   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
-  name = "clave-usuario"
+
+  # certificate {
+  #   contents = filebase64("cert.p12")
+  #   password = "adfasdfass"
+  # }
+
+  certificate_policy {
+    
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      
+      key_type = "RSA"
+      key_size = 2048
+      reuse_key = true
+      exportable = true
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      
+      subject = "cn=Prueba, ou=Formación, o=Acme"
+      key_usage = [ "keyCertSign", "dataEncipherment", "digitalSignature" ]
+      validity_in_months = 12
+
+      subject_alternative_names {
+        dns_names = [ "*.acme.com" ]
+      }
+
+    }
+
+    lifetime_action {
+      
+      action {        
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        lifetime_percentage = 25
+      }
+    }
+
+  }
+  
 }
 
+# data "azurerm_key_vault_certificate" "datos_certificado" {
+  
+#   name = "certificado-1"
+#   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
+# }
 
-output "valores_guardados" {
+# output "datos_certificado" {
 
-  value = "Usuario ${data.azurerm_key_vault_secret.nombre_usuario.value} - Clave ${data.azurerm_key_vault_secret.clave_usuario.value}"
+#   value = data.azurerm_key_vault_certificate.datos_certificado
 
+#   sensitive = true
+  
+# }
+
+# resource "local_file" "fichero_con_el_certificado" {
+
+#   content_base64 = data.azurerm_key_vault_certificate.datos_certificado.certificate_data_base64
+#   filename = "certificado.pem"
+
+#   depends_on = [ data.azurerm_key_vault_certificate.datos_certificado ]
+  
+# }
+
+resource "random_integer" "generar_entero" {
+  min = 1
+  max = 1000
+}
+
+resource "random_password" "generar_clave" {
+  min_lower = 3
+  min_upper = 3
+  min_special = 3
+  length = 20  
+}
+
+output "probar_proveedor_random" {
+
+  value = {
+    entero = random_integer.generar_entero.result
+    clave = random_password.generar_clave.result    
+  }
+  
   sensitive = true
-  
 }
+
+# data "azurerm_key_vault_key" "leer_clave_rsa" {
+#   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
+#   name = "clave-rsa"  
+# }
+
+# output "datos_clave_rsa" {
+#   value = data.azurerm_key_vault_key.leer_clave_rsa
+# }
+
+# data "azurerm_key_vault_secret" "nombre_usuario" {
+  
+#   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
+#   name = "nombre-usuario"
+# }
+
+# data "azurerm_key_vault_secret" "clave_usuario" {
+  
+#   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
+#   name = "clave-usuario"
+# }
+
+
+# output "valores_guardados" {
+
+#   value = "Usuario ${data.azurerm_key_vault_secret.nombre_usuario.value} - Clave ${data.azurerm_key_vault_secret.clave_usuario.value}"
+
+#   sensitive = true
+  
+# }
+
+############################################
+# Para leer todos los secretos
+
+# data "azurerm_key_vault_secrets" "secretos" {
+#   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id  
+# }
+
+# data "azurerm_key_vault_secret" "secreto" {
+
+#   key_vault_id = azurerm_key_vault.cursotf_alfredo_kv_1.id
+#   for_each = toset(data.azurerm_key_vault_secrets.secretos.names)
+#   name = each.key  
+# }
+
+# output "todos_los_secretos" {
+
+#   value = data.azurerm_key_vault_secret.secreto[*]
+
+#   sensitive = true
+  
+# }
+
+# output "valores_guardados_2" {
+
+#   value = "Usuario ${data.azurerm_key_vault_secret.secreto["nombre-usuario"].value} - Clave ${data.azurerm_key_vault_secret.secreto["clave-usuario"].value}"
+
+#   sensitive = true
+  
+# }
+
 
 output "funciones_hash_crypto" {
 
