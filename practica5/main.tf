@@ -66,6 +66,7 @@ resource "azurerm_kubernetes_cluster" "cluster_aks" {
   dns_prefix = "internal"
   sku_tier = "Standard"
 
+
   default_node_pool {
     name = "gruponodos1"
     node_count = 1
@@ -88,6 +89,10 @@ resource "azurerm_container_registry" "registro_aks" {
 
   sku = "Standard"
 
+  admin_enabled = true
+  
+
+
 }
 
 resource "azurerm_role_assignment" "registro_cluter_aks" {
@@ -108,5 +113,11 @@ output "certificado_cliente" {
 
 output "kube_config" {
   value = azurerm_kubernetes_cluster.cluster_aks.kube_config_raw
+  sensitive = true
+}
+
+output "registro_contenedores" {
+
+  value = azurerm_container_registry.registro_aks
   sensitive = true
 }

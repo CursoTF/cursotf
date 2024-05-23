@@ -1,0 +1,8 @@
+@subscriptionId=
+@locationName=westeurope
+@authorization=
+
+###
+https://management.azure.com/subscriptions/{{subscriptionId}}/providers/Microsoft.Sql/locations/{{locationName}}/capabilities?api-version=2021-11-01
+Authorization: Bearer {{authorization}}
+
