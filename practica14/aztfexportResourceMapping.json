@@ -1,0 +1,17 @@
+{
+	"/subscriptions/eee932a1-4207-417c-91b8-da540623dfed/resourceGroups/CURSOTF_ALFREDO_RG": {
+		"resource_id": "/subscriptions/eee932a1-4207-417c-91b8-da540623dfed/resourceGroups/CURSOTF_ALFREDO_RG",
+		"resource_type": "azurerm_resource_group",
+		"resource_name": "res-0"
+	},
+	"/subscriptions/eee932a1-4207-417c-91b8-da540623dfed/resourceGroups/CURSOTF_ALFREDO_RG/providers/Microsoft.Network/virtualNetworks/CURSOTF_ALFREDO_VN": {
+		"resource_id": "/subscriptions/eee932a1-4207-417c-91b8-da540623dfed/resourceGroups/CURSOTF_ALFREDO_RG/providers/Microsoft.Network/virtualNetworks/CURSOTF_ALFREDO_VN",
+		"resource_type": "azurerm_virtual_network",
+		"resource_name": "res-1"
+	},
+	"/subscriptions/eee932a1-4207-417c-91b8-da540623dfed/resourceGroups/CURSOTF_ALFREDO_RG/providers/Microsoft.Network/virtualNetworks/CURSOTF_ALFREDO_VN/subnets/CURSOTF_ALFREDO_SN_1": {
+		"resource_id": "/subscriptions/eee932a1-4207-417c-91b8-da540623dfed/resourceGroups/CURSOTF_ALFREDO_RG/providers/Microsoft.Network/virtualNetworks/CURSOTF_ALFREDO_VN/subnets/CURSOTF_ALFREDO_SN_1",
+		"resource_type": "azurerm_subnet",
+		"resource_name": "res-2"
+	}
+}

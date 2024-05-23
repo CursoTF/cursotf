@@ -57,6 +57,15 @@ resource "azurerm_redis_cache" "redis_cache_1" {
   
 }
 
+
+output "datos_redis_cache_1" {
+
+  value = "Datos de conexión: ${azurerm_redis_cache.redis_cache_1.primary_connection_string}"
+
+  sensitive = true
+  
+}
+
 resource "azurerm_redis_firewall_rule" "regla_firewall_redis_1" {
   name                = "regla_firewall_redis_1"
   redis_cache_name    = azurerm_redis_cache.redis_cache_1.name

@@ -43,6 +43,11 @@ resource "azurerm_eventhub_namespace" "pedidos_eh_namespace" {
   capacity            = 1
 }
 
+# data "azurerm_eventhub_namespace" "namespace_existente" {
+#   name = "namespace_existente"
+#   resource_group_name = "nombre_grupo"
+# }
+
 resource "azurerm_eventhub" "pedidos_eh" {
   name                = "pedidos_eh"
   namespace_name      = azurerm_eventhub_namespace.pedidos_eh_namespace.name
